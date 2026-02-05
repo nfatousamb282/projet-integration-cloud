@@ -24,7 +24,7 @@ USER spring
 
 
 # Copier le JAR depuis l'étape de build
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/projet-integration-cloud-1.0.0.jar app.jar
 
 # Exposer le port
 EXPOSE 8080
