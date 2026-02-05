@@ -19,7 +19,7 @@ spec:
       containers:
         - name: backend
           image: fa28/backend-integration-cloud:1.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
               name: http
