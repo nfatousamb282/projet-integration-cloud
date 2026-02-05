@@ -41,6 +41,7 @@ jobs:
           platforms: linux/amd64
           tags: fa28/frontend-integration-cloud:1.0
 
+
   deploy-to-gke:
     runs-on: ubuntu-latest
     needs: build-and-push
