@@ -1,6 +1,7 @@
 // L'URL de l'API sera gérée par le proxy Nginx en production
 // ou directement en développement
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+// Si tu es dans K8s, utiliser le service backend
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://backend-service:8080';
 
 export const produitService = {
   getAll: async () => {
