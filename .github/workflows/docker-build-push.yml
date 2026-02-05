@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
+      - name: Set up QEMU (for multi-arch builds)
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
@@ -49,32 +49,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 🔐 Auth Google Cloud (service account)
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      # ☁️ gcloud CLI
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
+          install_components: gke-gcloud-auth-plugin
 
-      # 🚀 GKE credentials (INSTALLE LE PLUGIN AUTOMATIQUEMENT)
       - name: Get GKE credentials
-        uses: google-github-actions/get-gke-credentials@v2
-        with:
-          cluster_name: ${{ secrets.GKE_CLUSTER }}
-          location: ${{ secrets.GKE_ZONE }}
-
-      # 🧪 Debug (optionnel mais très utile)
-      - name: Check cluster access
         run: |
-          kubectl get nodes
-          kubectl get pods -A
+          gcloud container clusters get-credentials \
+            ${{ secrets.GKE_CLUSTER }} \
+            --zone ${{ secrets.GKE_ZONE }} \
+            --project ${{ secrets.GCP_PROJECT_ID }}
 
-      # 📦 Deploy Kubernetes
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/
